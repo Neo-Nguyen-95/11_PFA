@@ -36,6 +36,7 @@ for index, student_id in enumerate(student_list):
     student_shorten_id[student_id] = index + 1
     
 df['Student_ID'] = df['StudentID'].map(student_shorten_id)
+df.drop(columns='StudentID', inplace=True)
 
 # convert to categorical data
 df['Student_ID'] = df['Student_ID'].astype('category')
@@ -49,11 +50,8 @@ student_info = pd.concat([student_perf, student_frequency], axis='columns')
 plt.figure(dpi=200)
 student_info.plot(kind='scatter', y='Success', x='count')
 
-
-# filter df
-# filter_student_map = (df['Student_ID'].value_counts()>100).to_dict()
-# df['Filter'] = df['Student_ID'].map(filter_student_map)
-# df = df[df['Filter'] == True]
+# save clean dataset
+df.to_csv("clean_data.csv")
 
 #%% ESTIMATE COEF
 # check crosstab
@@ -62,6 +60,6 @@ crosstab_student_skill.head()
 
 formula = 'Success ~ C(Student_ID) + C(Skill) + Opportunity : C(Skill) - 1'
 log_model = smf.logit(formula, data=df).fit()
-df.to_csv("clean_data.csv")
+
 
 
