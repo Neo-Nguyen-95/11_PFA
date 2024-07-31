@@ -2,6 +2,8 @@
 import pandas as pd
 pd.set_option('display.max_columns', None)
 
+import statsmodels.formula.api as smf
+
 df = pd.read_csv('/Users/dungnguyen/Library/CloudStorage/GoogleDrive-dzung.usth@gmail.com/My Drive/[Current work] AEGlobal/17. Team PD/Thực tập - Nguyên/Task 3/dataset.csv')
 
 #%% EDA
@@ -22,3 +24,27 @@ step_list = (df.groupby(['Problem', 'Step'])['Success'].mean()
 
 # skill list
 skill_list = df['Skill'].value_counts()
+
+#%% CLEAN
+
+# shorten StudentID
+student_list = set(df['StudentID'].values.tolist())
+
+student_shorten_id = {}
+for index, student_id in enumerate(student_list):
+    student_shorten_id[student_id] = index + 1
+    
+df['Student_ID'] = df['StudentID'].map(student_shorten_id)
+
+# convert to categorical data
+df['Student_ID'] = df['Student_ID'].astype('category')
+df['Skill'] = df['Skill'].astype('category')
+
+#%% ESTIMATE COEF
+# check crosstab
+crosstab_student_skill = pd.crosstab(df['Student_ID'], df['Skill'])
+crosstab_student_skill.head()
+
+formula = 'Success ~ C(Student_ID) + C(Skill) + Opportunity : C(Skill) - 1'
+log_model = smf.logit(formula, data=df).fit()
+
