@@ -51,7 +51,7 @@ plt.figure(dpi=200)
 student_info.plot(kind='scatter', y='Success', x='count')
 
 # save clean dataset
-df.to_csv("clean_data.csv")
+# df.to_csv("clean_data.csv")
 
 #%% ESTIMATE COEF
 # check crosstab
@@ -59,7 +59,10 @@ crosstab_student_skill = pd.crosstab(df['Student_ID'], df['Skill'])
 crosstab_student_skill.head()
 
 formula = 'Success ~ C(Student_ID) + C(Skill) + Opportunity : C(Skill) - 1'
-log_model = smf.logit(formula, data=df).fit()
-
+log_model = smf.logit(formula, data=df).fit(method = 'ncg',
+                                            maxiter=100)
+log_model.summary()
+log_model.aic
+log_model.bic
 
 
