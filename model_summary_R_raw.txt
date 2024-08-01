@@ -1,0 +1,98 @@
+
+Call:
+glm(formula = Success ~ Student_ID + Skill + Opportunity:Skill - 
+    1, family = binomial(), data = df)
+
+Coefficients:
+                                            Estimate Std. Error z value Pr(>|z|)    
+Student_ID1                                 -1.12872    0.98030  -1.151 0.249568    
+Student_ID2                                 -0.91169    0.86621  -1.053 0.292566    
+Student_ID3                                 -0.17396    0.67381  -0.258 0.796279    
+Student_ID4                                  0.29976    0.23901   1.254 0.209769    
+Student_ID5                                 -0.47315    0.41315  -1.145 0.252116    
+Student_ID6                                 -0.65636    0.91874  -0.714 0.474970    
+Student_ID7                                  0.97696    0.27380   3.568 0.000359 ***
+Student_ID8                                  0.08014    0.22599   0.355 0.722865    
+Student_ID9                                  0.03336    0.58312   0.057 0.954379    
+Student_ID10                                 0.62707    0.84603   0.741 0.458573    
+Student_ID11                                -0.59803    0.23270  -2.570 0.010172 *  
+Student_ID12                                 0.87409    0.34403   2.541 0.011061 *  
+Student_ID13                                -1.37279    0.32558  -4.217 2.48e-05 ***
+Student_ID14                                -0.07556    0.33254  -0.227 0.820263    
+Student_ID15                                 1.16822    0.36365   3.213 0.001316 ** 
+Student_ID16                                 0.21356    0.32463   0.658 0.510642    
+Student_ID17                                 0.52615    0.24566   2.142 0.032214 *  
+Student_ID18                                13.92355  309.73693   0.045 0.964145    
+Student_ID19                                 1.76238    0.36089   4.883 1.04e-06 ***
+Student_ID20                                -1.25124    0.40045  -3.125 0.001781 ** 
+Student_ID21                                13.84102  394.98104   0.035 0.972046    
+Student_ID22                                 0.95307    0.46934   2.031 0.042291 *  
+Student_ID23                                 0.26084    0.23264   1.121 0.262210    
+Student_ID24                                 0.53449    0.74006   0.722 0.470154    
+Student_ID25                                 0.52920    0.31938   1.657 0.097525 .  
+Student_ID26                                 0.01806    0.76205   0.024 0.981097    
+Student_ID27                                 0.93938    0.36781   2.554 0.010650 *  
+Student_ID28                                 0.05349    0.22612   0.237 0.813011    
+Student_ID29                                -0.07024    0.89376  -0.079 0.937363    
+Student_ID30                                -0.09953    0.22760  -0.437 0.661890    
+Student_ID31                                 0.92625    0.44276   2.092 0.036440 *  
+Student_ID32                                -0.38164    1.17650  -0.324 0.745648    
+Student_ID33                                 0.55953    0.26277   2.129 0.033227 *  
+Student_ID34                                -0.09529    0.22054  -0.432 0.665681    
+Student_ID35                                -1.12491    0.75040  -1.499 0.133853    
+Student_ID36                                 0.63257    0.25533   2.478 0.013230 *  
+Student_ID37                                 0.91567    0.56172   1.630 0.103078    
+Student_ID38                                 1.62530    1.06741   1.523 0.127844    
+Student_ID39                                 0.91528    0.26186   3.495 0.000474 ***
+Student_ID40                               -17.22431  634.58453  -0.027 0.978346    
+Student_ID41                                 1.16019    0.29346   3.953 7.70e-05 ***
+Student_ID42                                -0.46409    0.77795  -0.597 0.550802    
+Student_ID43                                13.60011  594.11199   0.023 0.981737    
+Student_ID44                                 0.47416    0.57181   0.829 0.406972    
+Student_ID45                                -0.17477    0.22742  -0.768 0.442213    
+Student_ID46                                 1.46017    0.31546   4.629 3.68e-06 ***
+Student_ID47                                 0.37616    0.24013   1.566 0.117234    
+Student_ID48                                -0.67794    0.46185  -1.468 0.142138    
+Student_ID49                                 1.46004    1.24591   1.172 0.241251    
+Student_ID50                                 1.55723    0.82732   1.882 0.059802 .  
+Student_ID51                                 0.30006    0.23044   1.302 0.192872    
+Student_ID52                                 0.32116    0.25046   1.282 0.199744    
+Student_ID53                                 0.74236    0.25691   2.890 0.003858 ** 
+Student_ID54                                 0.28483    0.24757   1.151 0.249925    
+Student_ID55                                -0.20887    0.88057  -0.237 0.812503    
+Student_ID56                                 0.48931    0.24263   2.017 0.043729 *  
+Student_ID57                                -0.07373    0.22374  -0.330 0.741773    
+Student_ID58                                 0.70384    0.51542   1.366 0.172072    
+Student_ID59                                 0.91732    0.27665   3.316 0.000914 ***
+Skillcircle-circumference                    0.51863    0.26608   1.949 0.051278 .  
+Skillcircle-diameter                         0.37259    0.25066   1.486 0.137164    
+Skillcompose-by-addition                     1.04447    0.23077   4.526 6.01e-06 ***
+Skillcompose-by-multiplication               0.07258    0.26021   0.279 0.780296    
+Skillequi-tri-height?                       -3.30996    0.72458  -4.568 4.92e-06 ***
+Skillparallelogram-area                      3.29082    1.04045   3.163 0.001562 ** 
+Skillpentagon-area                          -0.88909    0.23286  -3.818 0.000134 ***
+Skillsquare-area                             1.89763    0.27164   6.986 2.83e-12 ***
+Skilltrapezoid-area                         -0.95110    0.24398  -3.898 9.69e-05 ***
+Skilltriangle-area                           0.58353    0.24879   2.345 0.019005 *  
+Skillcircle-area:Opportunity                 0.06764    0.01153   5.864 4.51e-09 ***
+Skillcircle-circumference:Opportunity        0.06635    0.02642   2.511 0.012037 *  
+Skillcircle-diameter:Opportunity             0.03926    0.02152   1.825 0.068037 .  
+Skillcompose-by-addition:Opportunity        -0.02942    0.01223  -2.405 0.016184 *  
+Skillcompose-by-multiplication:Opportunity   0.11281    0.02237   5.043 4.57e-07 ***
+Skillequi-tri-height?:Opportunity            1.23583    0.31136   3.969 7.21e-05 ***
+Skillparallelogram-area:Opportunity         -0.69169    0.39931  -1.732 0.083241 .  
+Skillpentagon-area:Opportunity               0.11103    0.01557   7.131 9.95e-13 ***
+Skillsquare-area:Opportunity                 0.01963    0.01431   1.372 0.169978    
+Skilltrapezoid-area:Opportunity              0.09258    0.01711   5.411 6.25e-08 ***
+Skilltriangle-area:Opportunity               0.02677    0.01767   1.515 0.129698    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 7075.6  on 5104  degrees of freedom
+Residual deviance: 4954.0  on 5024  degrees of freedom
+AIC: 5114
+
+Number of Fisher Scoring iterations: 14
+

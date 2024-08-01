@@ -98,7 +98,7 @@ for line in coef_table_lines:
 
 # Create DataFrame and save to CSV
 df_summary = pd.DataFrame(data_for_csv[1:], columns=data_for_csv[0])
-df_summary.to_csv('model_summary.csv', index=False)
+df_summary.to_csv('model_summary_python.csv', index=False)
 
 print("Summary saved to 'model_summary.csv'")
 
