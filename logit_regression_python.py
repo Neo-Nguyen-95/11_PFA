@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 
 import statsmodels.formula.api as smf
 
+import convert_raw_to_csv
+
 df = pd.read_csv('/Users/dungnguyen/Library/CloudStorage/GoogleDrive-dzung.usth@gmail.com/My Drive/[Current work] AEGlobal/17. Team PD/Thực tập - Nguyên/Task 3/dataset.csv')
 
 #%% EDA
@@ -73,35 +75,7 @@ log_model.bic
 summary = log_model.summary()
 summary_as_text = summary.as_text()
 
-# Split the summary into lines
-summary_lines = summary_as_text.split('\n')
-
-# Find the start and end of the coefficient table
-start_index = summary_lines.index('-------------------------------------------------------------------------------------------------------------------') + 1
-end_index = summary_lines.index('===================================================================================================================', start_index)
-coef_table_lines = summary_lines[start_index:end_index]
-
-# Prepare data for CSV
-data_for_csv = []
-header = ['Variable', 'Coefficient', 'Std. Error', 'z-Value', 'P-Value']
-data_for_csv.append(header)
-
-for line in coef_table_lines:
-    if line.strip():  # Avoid empty lines
-        parts = line.split()
-        variable = parts[0]
-        coefficient = parts[1]
-        std_error = parts[2]
-        z_value = parts[3]
-        p_value = parts[4]
-        data_for_csv.append([variable, coefficient, std_error, z_value, p_value])
-
-# Create DataFrame and save to CSV
-df_summary = pd.DataFrame(data_for_csv[1:], columns=data_for_csv[0])
-df_summary.to_csv('model_summary_python.csv', index=False)
-
-print("Summary saved to 'model_summary.csv'")
-
-
+with open('model_summary_python_raw.txt', 'w') as file:
+    file.write(summary_as_text)
 
 

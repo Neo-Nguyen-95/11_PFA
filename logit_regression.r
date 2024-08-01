@@ -25,3 +25,7 @@ summary = summary(log_model)
 # result
 coefficients = coef(log_model)
 AIC = summary(log_model)$aic
+
+# print
+model_summary <- capture.output(summary)
+writeLines(model_summary, "model_summary_R_raw.txt")
