@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 
 import statsmodels.formula.api as smf
 
-import convert_raw_to_csv
-
 df = pd.read_csv('/Users/dungnguyen/Library/CloudStorage/GoogleDrive-dzung.usth@gmail.com/My Drive/[Current work] AEGlobal/17. Team PD/Thực tập - Nguyên/Task 3/dataset.csv')
 
 #%% EDA
