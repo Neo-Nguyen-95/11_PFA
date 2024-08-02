@@ -63,10 +63,10 @@ log_model.aic
 log_model.bic
 
 #%% EXPORT COEFFICIENTS
-# summary = log_model.summary()
-# summary_as_text = summary.as_text()
+summary = log_model.summary()
+summary_as_text = summary.as_text()
 
-# with open('model_summary_python_raw.txt', 'w') as file:
-#     file.write(summary_as_text)
+with open('model_summary_python_raw.txt', 'w') as file:
+    file.write(summary_as_text)
 
 

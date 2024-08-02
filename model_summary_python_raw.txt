@@ -1,35 +1,93 @@
                            Logit Regression Results                           
 ==============================================================================
 Dep. Variable:                Success   No. Observations:                 5104
-Model:                          Logit   Df Residuals:                     5082
-Method:                           MLE   Df Model:                           21
-Date:                Thu, 01 Aug 2024   Pseudo R-squ.:                 0.08597
-Time:                        16:24:18   Log-Likelihood:                -2615.4
+Model:                          Logit   Df Residuals:                     5024
+Method:                           MLE   Df Model:                           79
+Date:                Fri, 02 Aug 2024   Pseudo R-squ.:                  0.1343
+Time:                        08:59:27   Log-Likelihood:                -2477.0
 converged:                       True   LL-Null:                       -2861.3
-Covariance Type:            nonrobust   LLR p-value:                 7.030e-91
+Covariance Type:            nonrobust   LLR p-value:                1.343e-113
 ===================================================================================================================
                                                       coef    std err          z      P>|z|      [0.025      0.975]
 -------------------------------------------------------------------------------------------------------------------
-C(Skill)[circle-area]                               0.4158      0.147      2.821      0.005       0.127       0.705
-C(Skill)[circle-circumference]                      0.9700      0.213      4.554      0.000       0.552       1.387
-C(Skill)[circle-diameter]                           0.8623      0.193      4.458      0.000       0.483       1.241
-C(Skill)[compose-by-addition]                       1.3315      0.162      8.213      0.000       1.014       1.649
-C(Skill)[compose-by-multiplication]                 0.4944      0.201      2.464      0.014       0.101       0.888
-C(Skill)[equi-tri-height?]                         -2.6788      0.692     -3.874      0.000      -4.034      -1.323
-C(Skill)[parallelogram-area]                        3.1530      0.903      3.490      0.000       1.382       4.924
-C(Skill)[pentagon-area]                            -0.2957      0.163     -1.812      0.070      -0.616       0.024
-C(Skill)[square-area]                               2.0488      0.207      9.915      0.000       1.644       2.454
-C(Skill)[trapezoid-area]                           -0.4472      0.165     -2.707      0.007      -0.771      -0.123
-C(Skill)[triangle-area]                             1.0570      0.189      5.591      0.000       0.686       1.428
-Opportunity:C(Skill)[circle-area]                   0.0599      0.011      5.303      0.000       0.038       0.082
-Opportunity:C(Skill)[circle-circumference]          0.0407      0.026      1.575      0.115      -0.010       0.091
-Opportunity:C(Skill)[circle-diameter]               0.0123      0.021      0.592      0.554      -0.028       0.053
-Opportunity:C(Skill)[compose-by-addition]          -0.0254      0.012     -2.199      0.028      -0.048      -0.003
-Opportunity:C(Skill)[compose-by-multiplication]     0.1065      0.022      4.836      0.000       0.063       0.150
-Opportunity:C(Skill)[equi-tri-height?]              1.1685      0.305      3.836      0.000       0.572       1.765
-Opportunity:C(Skill)[parallelogram-area]           -0.5662      0.360     -1.574      0.115      -1.271       0.139
-Opportunity:C(Skill)[pentagon-area]                 0.0924      0.015      6.218      0.000       0.063       0.122
-Opportunity:C(Skill)[square-area]                   0.0234      0.014      1.699      0.089      -0.004       0.050
-Opportunity:C(Skill)[trapezoid-area]                0.0709      0.016      4.469      0.000       0.040       0.102
-Opportunity:C(Skill)[triangle-area]                 0.0110      0.017      0.634      0.526      -0.023       0.045
+C(Skill)[circle-area]                              -1.1287      0.980     -1.151      0.250      -3.050       0.793
+C(Skill)[circle-circumference]                     -0.6100      0.997     -0.612      0.541      -2.564       1.344
+C(Skill)[circle-diameter]                          -0.7561      0.993     -0.762      0.446      -2.702       1.190
+C(Skill)[compose-by-addition]                      -0.0842      0.980     -0.086      0.932      -2.006       1.838
+C(Skill)[compose-by-multiplication]                -1.0561      0.980     -1.078      0.281      -2.976       0.864
+C(Skill)[equi-tri-height?]                         -4.4386      1.203     -3.690      0.000      -6.796      -2.081
+C(Skill)[parallelogram-area]                        2.1622      1.415      1.528      0.127      -0.611       4.936
+C(Skill)[pentagon-area]                            -2.0177      0.988     -2.043      0.041      -3.954      -0.082
+C(Skill)[square-area]                               0.7690      0.988      0.779      0.436      -1.167       2.705
+C(Skill)[trapezoid-area]                           -2.0797      0.990     -2.101      0.036      -4.020      -0.139
+C(Skill)[triangle-area]                            -0.5451      0.992     -0.550      0.583      -2.489       1.399
+C(Student_ID)[T.2]                                  0.2169      1.291      0.168      0.867      -2.314       2.748
+C(Student_ID)[T.3]                                  0.9547      1.177      0.811      0.417      -1.352       3.262
+C(Student_ID)[T.4]                                  1.4284      0.989      1.444      0.149      -0.510       3.367
+C(Student_ID)[T.5]                                  0.6555      1.047      0.626      0.531      -1.396       2.707
+C(Student_ID)[T.6]                                  0.4722      1.327      0.356      0.722      -2.128       3.073
+C(Student_ID)[T.7]                                  2.1056      0.998      2.109      0.035       0.149       4.062
+C(Student_ID)[T.8]                                  1.2088      0.986      1.226      0.220      -0.724       3.142
+C(Student_ID)[T.9]                                  1.1620      1.119      1.039      0.299      -1.031       3.355
+C(Student_ID)[T.10]                                 1.7557      1.279      1.372      0.170      -0.752       4.263
+C(Student_ID)[T.11]                                 0.5306      0.988      0.537      0.591      -1.405       2.466
+C(Student_ID)[T.12]                                 2.0027      1.022      1.960      0.050       0.000       4.005
+C(Student_ID)[T.13]                                -0.2442      1.011     -0.241      0.809      -2.227       1.738
+C(Student_ID)[T.14]                                 1.0531      1.018      1.034      0.301      -0.942       3.049
+C(Student_ID)[T.15]                                 2.2968      1.026      2.239      0.025       0.286       4.307
+C(Student_ID)[T.16]                                 1.3422      1.015      1.322      0.186      -0.647       3.331
+C(Student_ID)[T.17]                                 1.6548      0.991      1.670      0.095      -0.288       3.597
+C(Student_ID)[T.18]                                10.7629     59.814      0.180      0.857    -106.470     127.996
+C(Student_ID)[T.19]                                 2.8910      1.026      2.818      0.005       0.881       4.901
+C(Student_ID)[T.20]                                -0.1226      1.038     -0.118      0.906      -2.157       1.912
+C(Student_ID)[T.21]                                10.1949     59.838      0.170      0.865    -107.086     127.475
+C(Student_ID)[T.22]                                 2.0817      1.069      1.947      0.052      -0.014       4.178
+C(Student_ID)[T.23]                                 1.3895      0.988      1.407      0.159      -0.546       3.325
+C(Student_ID)[T.24]                                 1.6631      1.212      1.372      0.170      -0.712       4.038
+C(Student_ID)[T.25]                                 1.6578      1.013      1.636      0.102      -0.328       3.644
+C(Student_ID)[T.26]                                 1.1467      1.225      0.936      0.349      -1.255       3.548
+C(Student_ID)[T.27]                                 2.0680      1.030      2.007      0.045       0.049       4.087
+C(Student_ID)[T.28]                                 1.1821      0.986      1.199      0.230      -0.750       3.114
+C(Student_ID)[T.29]                                 1.0584      1.311      0.807      0.420      -1.512       3.629
+C(Student_ID)[T.30]                                 1.0291      0.986      1.044      0.297      -0.903       2.962
+C(Student_ID)[T.31]                                 2.0549      1.056      1.945      0.052      -0.016       4.125
+C(Student_ID)[T.32]                                 0.7468      1.518      0.492      0.623      -2.229       3.723
+C(Student_ID)[T.33]                                 1.6882      0.995      1.696      0.090      -0.263       3.639
+C(Student_ID)[T.34]                                 1.0334      0.984      1.050      0.294      -0.896       2.963
+C(Student_ID)[T.35]                                 0.0037      1.213      0.003      0.998      -2.373       2.380
+C(Student_ID)[T.36]                                 1.7612      0.993      1.773      0.076      -0.186       3.708
+C(Student_ID)[T.37]                                 2.0443      1.109      1.843      0.065      -0.129       4.218
+C(Student_ID)[T.38]                                 2.7539      1.442      1.910      0.056      -0.072       5.580
+C(Student_ID)[T.39]                                 2.0439      0.995      2.054      0.040       0.094       3.994
+C(Student_ID)[T.40]                               -10.3735     59.868     -0.173      0.862    -127.712     106.965
+C(Student_ID)[T.41]                                 2.2888      1.004      2.280      0.023       0.321       4.257
+C(Student_ID)[T.42]                                 0.6646      1.230      0.540      0.589      -1.747       3.076
+C(Student_ID)[T.43]                                 9.1422     59.977      0.152      0.879    -108.411     126.696
+C(Student_ID)[T.44]                                 1.6028      1.114      1.439      0.150      -0.581       3.786
+C(Student_ID)[T.45]                                 0.9539      0.985      0.968      0.333      -0.978       2.885
+C(Student_ID)[T.46]                                 2.5888      1.011      2.562      0.010       0.608       4.570
+C(Student_ID)[T.47]                                 1.5048      0.989      1.521      0.128      -0.434       3.444
+C(Student_ID)[T.48]                                 0.4507      1.070      0.421      0.674      -1.647       2.548
+C(Student_ID)[T.49]                                 2.5886      1.573      1.646      0.100      -0.494       5.671
+C(Student_ID)[T.50]                                 2.6859      1.270      2.115      0.034       0.197       5.175
+C(Student_ID)[T.51]                                 1.4287      0.987      1.447      0.148      -0.506       3.364
+C(Student_ID)[T.52]                                 1.4498      0.992      1.461      0.144      -0.495       3.394
+C(Student_ID)[T.53]                                 1.8710      0.994      1.882      0.060      -0.077       3.819
+C(Student_ID)[T.54]                                 1.4135      0.991      1.426      0.154      -0.530       3.357
+C(Student_ID)[T.55]                                 0.9198      1.303      0.706      0.480      -1.633       3.473
+C(Student_ID)[T.56]                                 1.6179      0.990      1.634      0.102      -0.323       3.558
+C(Student_ID)[T.57]                                 1.0549      0.985      1.071      0.284      -0.876       2.986
+C(Student_ID)[T.58]                                 1.8325      1.087      1.686      0.092      -0.298       3.963
+C(Student_ID)[T.59]                                 2.0460      0.999      2.048      0.041       0.088       4.004
+Opportunity:C(Skill)[circle-area]                   0.0676      0.012      5.864      0.000       0.045       0.090
+Opportunity:C(Skill)[circle-circumference]          0.0663      0.026      2.511      0.012       0.015       0.118
+Opportunity:C(Skill)[circle-diameter]               0.0393      0.022      1.825      0.068      -0.003       0.081
+Opportunity:C(Skill)[compose-by-addition]          -0.0294      0.012     -2.405      0.016      -0.053      -0.005
+Opportunity:C(Skill)[compose-by-multiplication]     0.1128      0.022      5.043      0.000       0.069       0.157
+Opportunity:C(Skill)[equi-tri-height?]              1.2358      0.311      3.969      0.000       0.626       1.846
+Opportunity:C(Skill)[parallelogram-area]           -0.6917      0.399     -1.732      0.083      -1.474       0.091
+Opportunity:C(Skill)[pentagon-area]                 0.1110      0.016      7.131      0.000       0.081       0.142
+Opportunity:C(Skill)[square-area]                   0.0196      0.014      1.372      0.170      -0.008       0.048
+Opportunity:C(Skill)[trapezoid-area]                0.0926      0.017      5.411      0.000       0.059       0.126
+Opportunity:C(Skill)[triangle-area]                 0.0268      0.018      1.515      0.130      -0.008       0.061
 ===================================================================================================================
