@@ -4,7 +4,7 @@ pd.set_option('display.max_columns', None)
 
 import statsmodels.formula.api as smf
 
-df = pd.read_csv('clean_data.csv')
+df = pd.read_csv('data_clean_update.csv')
 
 #%% EDA
 # general infor
@@ -45,7 +45,7 @@ student_skil_count = df['Skill'].groupby(df['Student_ID']).value_counts()
 crosstab_student_skill = pd.crosstab(df['Student_ID'], df['Skill'])
 crosstab_student_skill.head()
 
-formula = 'Success ~ C(Student_ID) + C(Skill) +  + Opportunity : C(Skill) - 1'
+formula = 'Success ~ C(Student_ID) + C(Skill) + Opportunity:C(Skill) -1'
 """
 The -1 in the formula doesn't really cancel the intercept, but force it to 0
 Changing the order of variable in the equation leads to change in reference value
@@ -54,8 +54,7 @@ For the above model, ref value is Student ID No.1 = 0
 
 # more method and attribute for fit(), check
 # https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.Logit.fit.html
-log_model = smf.logit(formula, data=df).fit(method = 'ncg',
-                                            maxiter=100)
+log_model = smf.logit(formula, data=df).fit(model='ncg', maxiter=100)
 log_model.summary()
 
 log_model.aic

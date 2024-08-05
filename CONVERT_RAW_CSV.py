@@ -10,8 +10,8 @@ def transform(file_path, file_type):
         if file_type not in ['python', 'r']:
             raise ValueError("The file type must be 'python' or 'r'")
         if file_type == 'python':
-            start_index = summary_lines.index(['-------------------------------------------------------------------------------------------------------------------']) + 1
-            end_index = summary_lines.index(['==================================================================================================================='], start_index)
+            start_index = summary_lines.index(['-----------------------------------------------------------------------------------------------------------------------']) + 1
+            end_index = summary_lines.index(['======================================================================================================================='], start_index)
             
             output_name = 'model_summary_python.csv'
         elif file_type == 'r':
