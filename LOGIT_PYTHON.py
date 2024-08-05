@@ -45,13 +45,12 @@ student_skil_count = df['Skill'].groupby(df['Student_ID']).value_counts()
 crosstab_student_skill = pd.crosstab(df['Student_ID'], df['Skill'])
 crosstab_student_skill.head()
 
-formula = 'Success ~ C(Skill) + C(Student_ID) + Opportunity : C(Skill) - 1'
+formula = 'Success ~ C(Student_ID) + C(Skill) +  + Opportunity : C(Skill) - 1'
 """
 The -1 in the formula doesn't really cancel the intercept, but force it to 0
 Changing the order of variable in the equation leads to change in reference value
 For the above model, ref value is Student ID No.1 = 0
 """
-
 
 # more method and attribute for fit(), check
 # https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.Logit.fit.html
