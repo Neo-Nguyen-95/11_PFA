@@ -1,24 +1,25 @@
 #%% I. LIBRARY & IMPORT
 import pandas as pd
-pd.set_option("display.max_columns", None)
 import numpy as np
-
 import matplotlib.pyplot as plt
 
+pd.set_option("display.max_columns", None)
+
+# load data
 df_practice = pd.read_csv('data_clean_update.csv')
 df_coef = pd.read_csv('model_summary_python.csv')
 
 #%% II. ANALYSIS
 #%% 1. SKILL COUNT
-student_skil_count = (df_practice['Skill']
+student_skill_count = (df_practice['Skill']
                       .groupby(df_practice['Student_ID'])
                       .value_counts()
                       .reset_index())
 
-skill_practice_max = (student_skil_count['count']
-                      .groupby(student_skil_count['Skill']).max())
-skill_practice_mean = (student_skil_count['count']
-                       .groupby(student_skil_count['Skill']).mean())
+skill_practice_max = (student_skill_count['count']
+                      .groupby(student_skill_count['Skill']).max())
+skill_practice_mean = (student_skill_count['count']
+                       .groupby(student_skill_count['Skill']).mean())
 
 #%% 2. PREDICTED PROB(CORRECT)
 # Data format:

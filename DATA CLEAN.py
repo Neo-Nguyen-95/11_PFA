@@ -29,28 +29,31 @@ df.drop(columns = ['First Attempt', 'KC (Original)', 'Opportunity (Original)',
 
 #%% ADD SUCCESS_ & FAILURE_OPPORTUNITY
 
-# STEP 1: Verify opportunity calculation
-df_count = df[['Student_ID', 'Skill']]
-
+# Calculate Success opportunity
+df_count = df[['Student_ID', 'Skill', 'Success']]
 my_opportunity = []
-
 for i in range(len(df_count)):
     skill_name = df_count.iloc[0:i+1]['Skill'][i]
     student_id = df_count.iloc[0:i+1]['Student_ID'][i]
-    oppor = df_count.iloc[0:i+1].value_counts().loc[(student_id, skill_name)]
+    df_temp = df_count.iloc[0:i+1]
+    oppor = (df_temp[(df_temp['Skill'] == skill_name) & (df_temp['Student_ID'] == student_id)]['Success']
+             .aggregate(['count', 'sum'])
+             .values
+             )
     my_opportunity.append(oppor)
-    
-my_opportunity = pd.Series(my_opportunity)
 
-# STEP 2: Calculate Success and Failure opportunity
-df_count = df[['Student_ID', 'Skill', 'Success']]
+my_opportunity = pd.DataFrame(my_opportunity)
+my_opportunity.columns = ['Opportunity', 'Success_opportunity']
 
-i = 4
-skill_name = df_count.iloc[0:i+1]['Skill'][i]
-student_id = df_count.iloc[0:i+1]['Student_ID'][i]
-df_temp = df_count.iloc[0:i+1]
-df_temp[df_temp['Skill'] == skill_name]['Success'].sum()
+# Verify
+verification = (my_opportunity['Opportunity'] - df['Opportunity']).sum()
+print("The difference between author's Opportunity and mine is: ", verification)
 
+# Add Failure opportunity
+my_opportunity['Fail_opportunity'] = my_opportunity['Opportunity'] - my_opportunity['Success_opportunity']
+
+# merge to main dataframe
+df = df.join(my_opportunity[['Success_opportunity', 'Fail_opportunity']])
 
 #%% EXPORT
-# df.to_csv("data_clean_update.csv")
+df.to_csv("data_clean_update.csv")
