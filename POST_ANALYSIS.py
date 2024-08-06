@@ -1,13 +1,16 @@
-#%% LIBRARY & IMPORT
+#%% I. LIBRARY & IMPORT
 import pandas as pd
 pd.set_option("display.max_columns", None)
 import numpy as np
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 df_practice = pd.read_csv('data_clean_update.csv')
 df_coef = pd.read_csv('model_summary_python.csv')
 
-#%% ANALYSIS
-#%% count numbers of skill practice 
+#%% II. ANALYSIS
+#%% 1. SKILL COUNT
 student_skil_count = (df_practice['Skill']
                       .groupby(df_practice['Student_ID'])
                       .value_counts()
@@ -18,11 +21,13 @@ skill_practice_max = (student_skil_count['count']
 skill_practice_mean = (student_skil_count['count']
                        .groupby(student_skil_count['Skill']).mean())
 
-#%% calculate prob of correct
-# C(Student_ID)[1]
-# C(Skill)[T.circle-circumference]
-# Opportunity:C(Skill)[circle-area]
+#%% 2. PREDICTED PROB(CORRECT)
+# Data format:
+# - C(Student_ID)[1]
+# - C(Skill)[T.ALT:CIRCLE-CIRCUMFERENCE]
+# - Opportunity:C(Skill)[ALT:CIRCLE-AREA]
 
+# prob for each student - skill - opportunity
 def p_student_skill(student_id, skill_name, opportunity):
     df = df_coef.set_index('Variable')
     
@@ -40,6 +45,7 @@ def p_student_skill(student_id, skill_name, opportunity):
     
     return prob
 
+# prob for the whole dataframe
 def success_probability(df):
     df['success_probability'] = p_student_skill(
         student_id = df['Student_ID'],
@@ -50,7 +56,7 @@ def success_probability(df):
 
 df_practice = df_practice.apply(success_probability, axis='columns')
 
-#%% Error rate
+#%% 3. ERROR RATE DATAFRAME
 opportunity_count = (df_practice.groupby(['Skill', 'Opportunity'])['Success']
                      .count()
                      .rename('Number of Observation')
@@ -71,7 +77,7 @@ error_rate = error_rate.reset_index()
 error_rate['Empirical error rate'] = 1 - error_rate['P_Empirical Correctness']
 error_rate['Predicted error rate'] = 1 - error_rate['P_Predicted Correctness']
 
-# error rate by skill
+# basic visualization: error rate by skill
 (error_rate[error_rate['Skill'] == 'ALT:CIRCLE-CIRCUMFERENCE']
  .sort_values('Opportunity')
  .plot(kind='line', 
@@ -79,11 +85,65 @@ error_rate['Predicted error rate'] = 1 - error_rate['P_Predicted Correctness']
        y=['Empirical error rate', 'Predicted error rate'])
  )
 
-# number of observation by skill
+# basic visualization: number of observation by skill
 (error_rate[error_rate['Skill'] == 'ALT:CIRCLE-CIRCUMFERENCE']
  .sort_values('Opportunity')
  .plot(kind='line', x='Opportunity', y='Number of Observation')
  )
 
-# Overall error rate
-error_rate.groupby('Opportunity')[['Empirical error rate', 'Predicted error rate']].mean().plot()
+#%% 4. ERROR RATE VISUAL
+#%% 4.a Overall Error Rate
+fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(9, 6), dpi=200,
+                         gridspec_kw={'height_ratios': [2, 1]})
+data = (error_rate.groupby('Opportunity')[['Empirical error rate', 
+                                           'Predicted error rate',
+                                           'Number of Observation']]
+        .mean())
+data = round(data, 2)
+data = data.reset_index()
+axes[0].plot('Opportunity','Empirical error rate', data=data,
+         color='red', marker='s', markersize=4, linewidth=2)
+axes[0].plot('Opportunity','Predicted error rate', data=data,
+         color='green', marker='o', markersize=4,
+         linestyle='dashed', linewidth=2)
+axes[0].set_ylim(0, 1)
+axes[0].set_ylabel('Error rate [%]')
+axes[0].set_title('Overall error rate of all skills')
+
+axes[1].bar(data['Opportunity'], data['Number of Observation'])
+axes[1].set_ylabel('Count')
+
+plt.xlabel('Opportunity [th]')
+
+plt.show()
+
+#%% 4.b Error rate for each skill
+skill_list = error_rate['Skill'].unique().tolist()
+
+def skill_plot(skil_name):
+    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(9, 6), dpi=200,
+                             gridspec_kw={'height_ratios': [2, 1]})
+    
+    data = (error_rate[error_rate['Skill'] == skil_name]
+            .sort_values('Opportunity'))
+    
+    data = round(data, 2)
+    data = data.reset_index()
+    axes[0].plot('Opportunity','Empirical error rate', data=data,
+             color='red', marker='s', markersize=4, linewidth=2)
+    axes[0].plot('Opportunity','Predicted error rate', data=data,
+             color='green', marker='o', markersize=4,
+             linestyle='dashed', linewidth=2)
+    axes[0].set_ylim(0, 1)
+    axes[0].set_ylabel('Error rate [%]')
+    axes[0].set_title('Overall error rate of skill ' + skil_name)
+    
+    axes[1].bar(data['Opportunity'], data['Number of Observation'])
+    axes[1].set_ylabel('Count')
+    
+    plt.xlabel('Opportunity [th]')
+    
+    plt.show()
+    
+for skill in skill_list:
+    skill_plot(skill)
