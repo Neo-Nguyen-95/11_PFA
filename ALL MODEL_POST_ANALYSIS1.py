@@ -149,11 +149,11 @@ def plot_overall_error_rate(error_rate):
     # LFA
     axes[0].plot('Opportunity','LFA error rate', data=data,
              color='green', marker='o', markersize=3,
-             linestyle='dashed', linewidth=2)
+             linestyle='dashed', linewidth=1)
     # PFA
     axes[0].plot('Opportunity','PFA error rate', data=data,
              color='blue', marker='o', markersize=3,
-             linestyle='dashed', linewidth=2)
+             linestyle='dashed', linewidth=1)
     
     axes[0].set_ylim(0, 1)
     axes[0].set_ylabel('Error rate')
