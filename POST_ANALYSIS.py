@@ -4,7 +4,6 @@ pd.set_option("display.max_columns", None)
 import numpy as np
 
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 df_practice = pd.read_csv('data_clean_update.csv')
 df_coef = pd.read_csv('model_summary_python.csv')
@@ -94,26 +93,34 @@ error_rate['Predicted error rate'] = 1 - error_rate['P_Predicted Correctness']
 #%% 4. ERROR RATE VISUAL
 #%% 4.a Overall Error Rate
 fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(9, 6), dpi=200,
-                         gridspec_kw={'height_ratios': [2, 1]})
-data = (error_rate.groupby('Opportunity')[['Empirical error rate', 
-                                           'Predicted error rate',
-                                           'Number of Observation']]
+                         gridspec_kw={'height_ratios': [2, 1]},
+                         constrained_layout=True,
+                         sharex=True)
+data1 = (error_rate.groupby('Opportunity')[['Empirical error rate', 
+                                           'Predicted error rate']]
         .mean())
+
+data2 = (error_rate.groupby('Opportunity')['Number of Observation']
+        .sum())
+
+data = data1.join(data2)
 data = round(data, 2)
 data = data.reset_index()
+
 axes[0].plot('Opportunity','Empirical error rate', data=data,
          color='red', marker='s', markersize=4, linewidth=2)
 axes[0].plot('Opportunity','Predicted error rate', data=data,
          color='green', marker='o', markersize=4,
          linestyle='dashed', linewidth=2)
 axes[0].set_ylim(0, 1)
-axes[0].set_ylabel('Error rate [%]')
+axes[0].set_ylabel('Error rate')
 axes[0].set_title('Overall error rate of all skills')
 
 axes[1].bar(data['Opportunity'], data['Number of Observation'])
-axes[1].set_ylabel('Count')
+axes[1].set_ylabel('Observation count')
 
 plt.xlabel('Opportunity [th]')
+plt.xticks(data['Opportunity'])
 
 plt.show()
 
@@ -122,7 +129,9 @@ skill_list = error_rate['Skill'].unique().tolist()
 
 def skill_plot(skil_name):
     fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(9, 6), dpi=200,
-                             gridspec_kw={'height_ratios': [2, 1]})
+                             gridspec_kw={'height_ratios': [2, 1]},
+                             sharex=True,
+                             constrained_layout=True)
     
     data = (error_rate[error_rate['Skill'] == skil_name]
             .sort_values('Opportunity'))
@@ -135,15 +144,22 @@ def skill_plot(skil_name):
              color='green', marker='o', markersize=4,
              linestyle='dashed', linewidth=2)
     axes[0].set_ylim(0, 1)
-    axes[0].set_ylabel('Error rate [%]')
+    axes[0].set_ylabel('Error rate')
     axes[0].set_title('Overall error rate of skill ' + skil_name)
     
     axes[1].bar(data['Opportunity'], data['Number of Observation'])
-    axes[1].set_ylabel('Count')
+    axes[1].set_ylabel('Observation count')
     
     plt.xlabel('Opportunity [th]')
+    plt.xticks(data['Opportunity'])
     
     plt.show()
     
 for skill in skill_list:
     skill_plot(skill)
+    
+#%% SILLY CROSS CHECK WITH WEBSITE
+
+for skill in skill_list:
+    print(skill)
+    print(df_practice[df_practice['Skill'] == skill]['Success'].value_counts())
