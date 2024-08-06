@@ -55,6 +55,27 @@ def success_probability(df_practice, df_coef):
 
 df_practice = success_probability(df_practice, df_coef)
 
+# AIC
+def calculate_AIC(df):
+    p = df['success_probability']
+    y = df['Success']
+    log_likelihood = (y * np.log(p) + (1 - y) * np.log(1 - p)).sum()
+    
+    # num of param = number of student + number of skill + number of interaction
+    k = df_practice['Student_ID'].nunique() + df_practice['Skill'].nunique()*2
+    
+    return -2 * log_likelihood + 2 * k
+    
+calculate_AIC(df_practice)   
+
+# MAD
+def calculate_MAD(df):
+    p = df['success_probability']
+    y = df['Success']
+    return (abs(p - y)).mean()
+
+calculate_MAD(df_practice)
+
 #%% 3. ERROR RATE DATAFRAME
 def calculate_error_rate(df):
     opportunity_count = (df.groupby(['Skill', 'Opportunity'])['Success']

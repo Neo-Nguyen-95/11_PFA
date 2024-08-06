@@ -10,15 +10,15 @@ def transform(file_path, file_type):
         if file_type not in ['python', 'r']:
             raise ValueError("The file type must be 'python' or 'r'")
         if file_type == 'python':
-            start_index = summary_lines.index(['-----------------------------------------------------------------------------------------------------------------------']) + 1
-            end_index = summary_lines.index(['======================================================================================================================='], start_index)
+            start_index = summary_lines.index(['-------------------------------------------------------------------------------------------------------------------------------']) + 1
+            end_index = summary_lines.index(['==============================================================================================================================='], start_index)
             
-            output_name = 'model_summary_python.csv'
+            output_name = python_file_path[:3] + '_summary_python.csv'
         elif file_type == 'r':
             start_index = summary_lines.index(['Estimate Std. Error z value Pr(>|z|)']) + 1
             end_index = summary_lines.index(['---'])
             
-            output_name = 'model_summary_r.csv'
+            output_name = r_file_path[:3] + '_summary_r.csv'
         else: 
             print('Warning: wrong format indicator!')
         
@@ -49,7 +49,7 @@ def transform(file_path, file_type):
         print(f'Error: {e}')
         
         
-python_file_path  = "model_summary_python_raw.txt"
+python_file_path  = "PFA_summary_python_raw.txt"
 # r_file_path = "model_summary_R_raw.txt"
 
 transform(python_file_path, 'python')

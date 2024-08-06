@@ -35,7 +35,7 @@ def fit_logistic_regression(df):
     Changing the order of variable in the equation leads to change in reference value
     For the below model, ref value is Student ID No.1 = 0
     """
-    formula = 'Success ~ C(Student_ID) + C(Skill) + Opportunity:C(Skill) -1'
+    formula = 'Success ~ C(Skill) + Success_opportunity:C(Skill) +  Fail_opportunity:C(Skill) -1'
     
     # more method and attribute for fit(), check
     # https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.Logit.fit.html
@@ -52,7 +52,7 @@ print("BIC: ", log_model.bic)
 summary = log_model.summary()
 summary_as_text = summary.as_text()
 
-with open('model_summary_python_raw.txt', 'w') as file:
+with open('PFA_summary_python_raw.txt', 'w') as file:
     file.write(summary_as_text)
 
 
