@@ -7,53 +7,43 @@ df = df[['Anon Student Id', 'Problem Name', 'Step Name', 'First Attempt',
         'KC (Original)', 'Opportunity (Original)', 'Predicted Error Rate (Original)']]
 
 #%% CLEANING
-# shorten StudentID
-student_list = set(df['Anon Student Id'].values.tolist())
-
-student_shorten_id = {}
-for index, student_id in enumerate(student_list):
-    student_shorten_id[student_id] = index + 1
+def clean_data(df):
+    """Clean and preprocess the dataframe"""
+    # shorten student ID
+    df['Student_ID'] = df['Anon Student Id'].astype('category').cat.codes +1
     
-df['Student_ID'] = df['Anon Student Id'].map(student_shorten_id)
-df.drop(columns='Anon Student Id', inplace=True)
+    # map success values
+    df['Success'] = df['First Attempt'].map({'correct': 1, 'incorrect': 0})
+    
+    # rename columns
+    df.rename(columns={
+        'KC (Original)' : 'Skill',
+        'Opportunity (Original)': 'Opportunity',
+        'Problem Name': 'Problem',
+        'Step Name': 'Step'
+        }, inplace=True)
 
-df['Success'] = df['First Attempt'].map({'correct': 1, 'incorrect': 0})
-df['Skill'] = df['KC (Original)']  # rename
-df['Opportunity'] = df['Opportunity (Original)']  # rename
-df['Problem'] = df['Problem Name']  # rename
-df['Step'] = df['Step Name']
+    df.drop(columns = ['Anon Student Id', 'First Attempt'], inplace=True)
+    
+    return df
 
-df.drop(columns = ['First Attempt', 'KC (Original)', 'Opportunity (Original)',
-                   'Problem Name', 'Step Name'],
-        inplace=True)
-
+df = clean_data(df)
+    
+    
 #%% ADD SUCCESS_ & FAILURE_OPPORTUNITY
 
-# Calculate Success opportunity
-df_count = df[['Student_ID', 'Skill', 'Success']]
-my_opportunity = []
-for i in range(len(df_count)):
-    skill_name = df_count.iloc[0:i+1]['Skill'][i]
-    student_id = df_count.iloc[0:i+1]['Student_ID'][i]
-    df_temp = df_count.iloc[0:i+1]
-    oppor = (df_temp[(df_temp['Skill'] == skill_name) & (df_temp['Student_ID'] == student_id)]['Success']
-             .aggregate(['count', 'sum'])
-             .values
-             )
-    my_opportunity.append(oppor)
+def calculate_opportunities(df):
+    df['Calculated Opportunity'] = df.groupby(['Student_ID', 'Skill']).cumcount() + 1
+    df['Success_opportunity'] = df.groupby(['Student_ID', 'Skill'])['Success'].cumsum()
+    df['Fail_opportunity'] = df['Opportunity'] - df['Success_opportunity']
+    
+    return df
 
-my_opportunity = pd.DataFrame(my_opportunity)
-my_opportunity.columns = ['Opportunity', 'Success_opportunity']
+df = calculate_opportunities(df)
 
 # Verify
-verification = (my_opportunity['Opportunity'] - df['Opportunity']).sum()
+verification = (df['Opportunity'] - df['Calculated Opportunity']).sum()
 print("The difference between author's Opportunity and mine is: ", verification)
-
-# Add Failure opportunity
-my_opportunity['Fail_opportunity'] = my_opportunity['Opportunity'] - my_opportunity['Success_opportunity']
-
-# merge to main dataframe
-df = df.join(my_opportunity[['Success_opportunity', 'Fail_opportunity']])
 
 #%% EXPORT
 df.to_csv("data_clean_update.csv")
