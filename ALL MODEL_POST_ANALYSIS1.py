@@ -72,24 +72,28 @@ df_practice = pfa_success_probability(df_practice, pfa_coef)
 
 #%% 3. MODEL EVALUATE 
 # AIC
-def model_evaluation(df, prob_column, df_coef):
-    p = df[prob_column]
-    y = df['Success']
+def model_evaluation(real_value, predicted_value, coef):
+    p = predicted_value
+    y = real_value
     log_likelihood = (y * np.log(p) + (1 - y) * np.log(1 - p)).sum()
     
     # num of param = number of student + number of skill + number of interaction
-    k = len(df_coef)
+    k = len(coef)
     
     AIC = -2 * log_likelihood + 2 * k
     MAD = (abs(p - y)).mean()
     return AIC, MAD
 
-LFA_AIC, LFA_MAD = model_evaluation(df_practice, 'lfa_success_probability', lfa_coef)
+LFA_AIC, LFA_MAD = model_evaluation(df_practice['Success'],
+                                    df_practice['lfa_success_probability'],
+                                    lfa_coef)
 print('LFA:')
 print('- AIC: ', LFA_AIC)
 print('- MAD: ', LFA_MAD)
 
-PFA_AIC, PFA_MAD = model_evaluation(df_practice, 'pfa_success_probability', pfa_coef)
+PFA_AIC, PFA_MAD = model_evaluation(df_practice['Success'],
+                                    df_practice['pfa_success_probability'],
+                                    pfa_coef)
 print('PFA:')
 print('- AIC: ', PFA_AIC)
 print('- MAD: ', PFA_MAD)
