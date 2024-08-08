@@ -9,6 +9,7 @@ pd.set_option("display.max_columns", None)
 df_practice = pd.read_csv('data_clean_update.csv')
 lfa_coef = pd.read_csv('LFA_summary_python.csv')
 pfa_coef = pd.read_csv('PFA_summary_python.csv')
+bkt_coef = pd.read_csv('BKT_summary.csv')
 
 #%% II. ANALYSIS
 #%% 1. PREDICTED PROB FOR LFA
@@ -69,16 +70,34 @@ def pfa_success_probability(df, df_coef):
 
 df_practice = pfa_success_probability(df_practice, pfa_coef)
 
+#%% 3. PREDICTED PROB FOR BKT
+def transform_bkt_file(filepath):
+    bkt_pred = pd.read_csv(filepath)
+    bkt_pred.drop(columns=['Unnamed: 0', 'state_predictions'], inplace=True)
+    bkt_pred.rename(columns={
+        'user_id': 'Student_ID',
+        'skill_name': 'Skill',
+        'correct_predictions': 'bkt_success_probability'
+        }, inplace=True)
+    
+    return bkt_pred
 
-#%% 3. MODEL EVALUATE 
+bkt_pred = transform_bkt_file('BKT_prediction.csv')
+
+df_practice = df_practice.join(bkt_pred['bkt_success_probability'])
+
+#%% 4. MODEL EVALUATE 
 # AIC
-def model_evaluation(real_value, predicted_value, coef):
-    p = predicted_value
+def model_evaluation(real_value, predicted_value, coef, model='normal'):
+    p = predicted_value + 1e-5
     y = real_value
-    log_likelihood = (y * np.log(p) + (1 - y) * np.log(1 - p)).sum()
+    log_likelihood = (y * np.log(p) + (1 - y) * np.log(abs(1 - p))).sum()
     
     # num of param = number of student + number of skill + number of interaction
-    k = len(coef)
+    if model == 'bkt':
+        k = len(coef) * 4 / 5
+    else:
+        k = len(coef)
     
     AIC = -2 * log_likelihood + 2 * k
     MAD = (abs(p - y)).mean()
@@ -98,6 +117,13 @@ print('PFA:')
 print('- AIC: ', PFA_AIC)
 print('- MAD: ', PFA_MAD)
 
+BKT_AIC, BKT_MAD = model_evaluation(df_practice['Success'],
+                                    df_practice['bkt_success_probability'],
+                                    bkt_coef, model='bkt')
+print('BKT:')
+print('- AIC: ', BKT_AIC)
+print('- MAD: ', BKT_MAD)
+
 #%% 3. ERROR RATE DATAFRAME
 def calculate_error_rate(df):
     opportunity_count = (df.groupby(['Skill', 'Opportunity'])['Success']
@@ -116,13 +142,19 @@ def calculate_error_rate(df):
                         .mean()
                         .rename('PFA_Predicted Correctness')
                         )
+    bkt_predicted_prob = (df.groupby(['Skill', 'Opportunity'])['bkt_success_probability']
+                        .mean()
+                        .rename('BKT_Predicted Correctness')
+                        )
     
     error_rate = pd.concat([opportunity_count, empirical_prob, 
-                            lfa_predicted_prob, pfa_predicted_prob], axis=1)
+                            lfa_predicted_prob, pfa_predicted_prob,
+                            bkt_predicted_prob], axis=1)
     error_rate = error_rate.reset_index()
     error_rate['Empirical error rate'] = 1 - error_rate['P_Empirical Correctness']
     error_rate['LFA error rate'] = 1 - error_rate['LFA_Predicted Correctness']
     error_rate['PFA error rate'] = 1 - error_rate['PFA_Predicted Correctness']
+    error_rate['BKT error rate'] = 1 - error_rate['BKT_Predicted Correctness']
     
     return error_rate
 
@@ -137,7 +169,8 @@ def plot_overall_error_rate(error_rate):
                              sharex=True)
     data1 = (error_rate.groupby('Opportunity')[['Empirical error rate', 
                                                'LFA error rate',
-                                               'PFA error rate']]
+                                               'PFA error rate',
+                                               'BKT error rate']]
             .mean())
     
     data2 = (error_rate.groupby('Opportunity')['Number of Observation']
@@ -157,6 +190,11 @@ def plot_overall_error_rate(error_rate):
     # PFA
     axes[0].plot('Opportunity','PFA error rate', data=data,
              color='blue', marker='o', markersize=3,
+             linestyle='dashed', linewidth=1)
+    
+    # BKT
+    axes[0].plot('Opportunity','BKT error rate', data=data,
+             color='red', marker='o', markersize=3,
              linestyle='dashed', linewidth=1)
     
     axes[0].set_ylim(0, 1)
@@ -201,6 +239,11 @@ def skill_plot(skill_name):
              color='blue', marker='o', markersize=3,
              linestyle='dashed', linewidth=1)
     
+    # BKT
+    axes[0].plot('Opportunity','BKT error rate', data=data,
+             color='red', marker='o', markersize=3,
+             linestyle='dashed', linewidth=1)
+    
     axes[0].set_ylim(0, 1)
     axes[0].set_ylabel('Error rate')
     axes[0].set_title('Overall error rate of skill ' + skill_name)
@@ -216,7 +259,10 @@ def skill_plot(skill_name):
     
 for skill in skill_list:
     skill_plot(skill)
+  
     
+#%% EXPORT
+df_practice.to_excel('final_result.xlsx')  
 #%% SILLY CROSS CHECK WITH WEBSITE
 
 def cross_check_success(df_practice, skill_list):
