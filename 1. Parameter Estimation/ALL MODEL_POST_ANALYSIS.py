@@ -9,7 +9,7 @@ pd.set_option("display.max_columns", None)
 df_practice = pd.read_csv('data_clean_update.csv')
 lfa_coef = pd.read_csv('LFA_summary_python.csv')
 pfa_coef = pd.read_csv('PFA_summary_python.csv')
-bkt_coef = pd.read_csv('BKT_summary.csv')
+bkt_coef = pd.read_csv('BKT_summary_kc.csv')
 
 #%% II. ANALYSIS
 #%% 1. PREDICTED PROB FOR LFA
@@ -82,7 +82,7 @@ def transform_bkt_file(filepath):
     
     return bkt_pred
 
-bkt_pred = transform_bkt_file('BKT_prediction.csv')
+bkt_pred = transform_bkt_file('BKT_prediction_kc.csv')
 
 df_practice = df_practice.join(bkt_pred['bkt_success_probability'])
 
@@ -119,7 +119,7 @@ print('- MAD: ', PFA_MAD)
 
 BKT_AIC, BKT_MAD = model_evaluation(df_practice['Success'],
                                     df_practice['bkt_success_probability'],
-                                    bkt_coef, model='bkt')
+                                    bkt_coef)
 print('BKT:')
 print('- AIC: ', BKT_AIC)
 print('- MAD: ', BKT_MAD)
