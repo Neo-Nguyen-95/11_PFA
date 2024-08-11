@@ -47,10 +47,10 @@ def pfa_transform(pfa_coef):
 pfa_coef_update = pfa_transform(pfa_coef)
 
 #%% CLUSTERING
-def kmean(df):
+def kmean(df, cluster=3):
     model = make_pipeline(
         StandardScaler(),
-        KMeans(n_clusters=3, random_state=42)
+        KMeans(n_clusters=cluster, random_state=42)
         )
     
     model.fit(df)
@@ -73,8 +73,22 @@ sns.scatterplot(data=bkt_coef_update, x='prior', y='learns', hue='cluster',
 plt.figure(dpi=200)
 sns.scatterplot(data=bkt_coef_update, x='guesses', y='slips', hue='cluster')
 
+#%% PFA grid search
+inertia = []
+ss = []
+cluster_range = list(range(2, 10))
+for cluster in cluster_range:
+    pfa_coef_update, pfa_cluster_mean, pfa_inertia, pfa_ss = kmean(
+        pfa_coef_update, cluster=cluster)
+    inertia.append(pfa_inertia)
+    ss.append(pfa_ss)
+    
+sns.scatterplot(x=cluster_range, y=inertia)
+sns.scatterplot(x=cluster_range, y=ss)
+
 #%% PFA coef clustering
-pfa_coef_update, pfa_cluster_mean, pfa_inertia, pfa_ss = kmean(pfa_coef_update)
+pfa_coef_update, pfa_cluster_mean, pfa_inertia, pfa_ss = kmean(
+    pfa_coef_update, cluster=4)
 
 fig = px.scatter_3d(pfa_coef_update, z='skill_diff', y='success_coef', x='fail_coef',
                     color='cluster')

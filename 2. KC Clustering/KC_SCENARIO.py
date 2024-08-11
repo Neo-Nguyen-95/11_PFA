@@ -9,7 +9,7 @@ pd.set_option('display.max_columns', None)
 # pfa_cluster_params = pd.read_csv('PFA_cluster_parameters.csv',
 #                                  index_col='cluster')
 
-pfa_cluster_params = pd.read_csv('PFA_no_cluster_parameters.csv',
+pfa_cluster_params = pd.read_csv('PFA_cluster_parameters.csv',
                                  index_col='cluster')
 
 # GENERATE SCENARIO
@@ -65,7 +65,7 @@ sns.scatterplot(data=table_scenario,
 
 #%% DECISION MAKING
 # Success prob if having correct answer at 1st time
-s1 = table_scenario[table_scenario['total_op'] == 0]
+s1 = table_scenario[table_scenario['total_opp'] == 0]
 s1
 """1st time correct => prob > 0.7 => choose 0.8
 """
@@ -75,6 +75,8 @@ s2 = table_scenario[(table_scenario['total_opp'] >= 3) &
                (table_scenario['success_probability'] >= 0.8)
                ]
 
+
+s2.groupby(['cluster', 'fail_opp'])['success_opp'].min()
 # success - fail distance for each cluster
 
 
