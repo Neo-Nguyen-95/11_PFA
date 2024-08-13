@@ -49,8 +49,8 @@ def transform(file_path, file_type):
         print(f'Error: {e}')
         
         
-python_file_path  = "PFA_summary_python_raw.txt"
-# r_file_path = "model_summary_R_raw.txt"
+# python_file_path  = "PFA_summary_python_raw.txt"
+r_file_path = "PFA_summary_R_raw.txt"
 
-transform(python_file_path, 'python')
-# transform(r_file_path, 'r')
+# transform(python_file_path, 'python')
+transform(r_file_path, 'r')

@@ -1,4 +1,4 @@
-#%% LOAD DATA
+#%% --- 0. LOAD DATA ---
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
@@ -16,6 +16,7 @@ bkt_coef = pd.read_csv('/Users/dungnguyen/Desktop/Data Science off/Python Progra
 
 pfa_coef = pd.read_csv('/Users/dungnguyen/Desktop/Data Science off/Python Programming/1. Work Project/11_PFA/1. Parameter Estimation/PFA_summary_python.csv')
 
+# get KC data from raw dataset
 class kc_raw_process:
     """Get KC data from raw dataset"""
     def __init__(self, datapath):
@@ -43,7 +44,7 @@ kc_max_opp = raw_data.get_max_off()
 kc_average_opp = raw_data.get_averate_opp()
 
 
-#%% TRANSFORM
+#%% --- I. TRANSFORM ---
 def bkt_transform(df):
     result = pd.DataFrame(
         {'skill': df['skill'].unique(),
@@ -73,14 +74,14 @@ def pfa_transform(pfa_coef):
 
 pfa_coef_update = pfa_transform(pfa_coef)
 
-#%% COEF DATA MINING
-data_bkt = bkt_coef_update.copy()
-data_bkt.columns = 'bkt_' + data_bkt.columns
+#%% --- II. COEF DATA MINING ---
+bkt_temp = bkt_coef_update.copy()
+bkt_temp.columns = 'bkt_' + bkt_temp.columns
 
-data_pfa = pfa_coef_update.copy()
-data_pfa.columns = 'pfa_' + data_pfa.columns
+pfa_temp = pfa_coef_update.copy()
+pfa_temp.columns = 'pfa_' + pfa_temp.columns
 
-coef_mining = (data_bkt.join(data_pfa)
+coef_mining = (bkt_temp.join(pfa_temp)
                .join(kc_ctt_diff)
                .join(kc_max_opp)
                .join(kc_average_opp)
@@ -93,7 +94,8 @@ sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f',
             vmin=-1, vmax=1)
 sns.pairplot(coef_mining, diag_kind='kde')
 
-#%% CLUSTERING
+
+#%% --- III. CLUSTERING ---
 def kmean(df, cluster=3):
     model = make_pipeline(
         StandardScaler(),
@@ -111,7 +113,7 @@ def kmean(df, cluster=3):
     
     return df, cluster_mean, inertia, ss
 
-#%% BKT coef clustering
+#%% 3.1 BKT coef k-mean clustering
 bkt_coef_update, bkt_cluster_mean, bkt_inertia, bkt_ss = kmean(bkt_coef_update)
 plt.figure(dpi=200)
 sns.scatterplot(data=bkt_coef_update, x='prior', y='learns', hue='cluster',
@@ -120,7 +122,7 @@ sns.scatterplot(data=bkt_coef_update, x='prior', y='learns', hue='cluster',
 plt.figure(dpi=200)
 sns.scatterplot(data=bkt_coef_update, x='guesses', y='slips', hue='cluster')
 
-#%% PFA grid search
+#%% 3.2.A PFA k-mean grid search
 inertia = []
 ss = []
 cluster_range = list(range(2, 10))
@@ -133,7 +135,7 @@ for cluster in cluster_range:
 sns.scatterplot(x=cluster_range, y=inertia)
 sns.scatterplot(x=cluster_range, y=ss)
 
-#%% PFA coef clustering
+#%% 3.2.B PFA k-mean coef clustering
 pfa_coef_update, pfa_cluster_mean, pfa_inertia, pfa_ss = kmean(
     pfa_coef_update, cluster=4)
 
