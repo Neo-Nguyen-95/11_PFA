@@ -16,6 +16,33 @@ bkt_coef = pd.read_csv('/Users/dungnguyen/Desktop/Data Science off/Python Progra
 
 pfa_coef = pd.read_csv('/Users/dungnguyen/Desktop/Data Science off/Python Programming/1. Work Project/11_PFA/1. Parameter Estimation/PFA_summary_python.csv')
 
+class kc_raw_process:
+    """Get KC data from raw dataset"""
+    def __init__(self, datapath):
+        self.df = pd.read_csv(datapath)
+    
+    def get_ctt_diff(self):
+        return self.df.groupby('Skill')['Success'].mean().rename('ctt_diff')
+    
+    def get_max_off(self):
+        return (self.df.groupby('Skill')['Opportunity'].max()
+                .rename('max_opportunity')
+                )
+    
+    def get_averate_opp(self):
+        return (self.df.groupby(['Skill', 'Student_ID'])['Opportunity'].max()
+                .reset_index()
+                .groupby('Skill')['Opportunity'].mean()
+                .rename('average_opportunity')
+                )
+
+datapath = '/Users/dungnguyen/Desktop/Data Science off/Python Programming/1. Work Project/11_PFA/1. Parameter Estimation/data_clean_update.csv'
+raw_data = kc_raw_process(datapath=datapath)
+kc_ctt_diff = raw_data.get_ctt_diff()
+kc_max_opp = raw_data.get_max_off()
+kc_average_opp = raw_data.get_averate_opp()
+
+
 #%% TRANSFORM
 def bkt_transform(df):
     result = pd.DataFrame(
@@ -45,6 +72,26 @@ def pfa_transform(pfa_coef):
     return result
 
 pfa_coef_update = pfa_transform(pfa_coef)
+
+#%% COEF DATA MINING
+data_bkt = bkt_coef_update.copy()
+data_bkt.columns = 'bkt_' + data_bkt.columns
+
+data_pfa = pfa_coef_update.copy()
+data_pfa.columns = 'pfa_' + data_pfa.columns
+
+coef_mining = (data_bkt.join(data_pfa)
+               .join(kc_ctt_diff)
+               .join(kc_max_opp)
+               .join(kc_average_opp)
+               )
+
+# check correlation between parameters
+correlation_matrix = coef_mining.corr()
+plt.figure(dpi=200)
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f',
+            vmin=-1, vmax=1)
+sns.pairplot(coef_mining, diag_kind='kde')
 
 #%% CLUSTERING
 def kmean(df, cluster=3):
@@ -90,14 +137,14 @@ sns.scatterplot(x=cluster_range, y=ss)
 pfa_coef_update, pfa_cluster_mean, pfa_inertia, pfa_ss = kmean(
     pfa_coef_update, cluster=4)
 
-fig = px.scatter_3d(pfa_coef_update, z='skill_diff', y='success_coef', x='fail_coef',
-                    color='cluster')
-fig.show()
+# fig = px.scatter_3d(pfa_coef_update, z='skill_diff', y='success_coef', x='fail_coef',
+#                     color='cluster')
+# fig.show()
 
 #%% PFA coef export
-pfa_coef_update.to_csv('PFA_coefficient_clustering.csv')
-pfa_cluster_mean.to_csv('PFA_cluster_parameters.csv')
+# pfa_coef_update.to_csv('PFA_coefficient_clustering.csv')
+# pfa_cluster_mean.to_csv('PFA_cluster_parameters.csv')
 
-pfa_coef_update['cluster'] = list(range(len(pfa_coef_update)))
-pfa_coef_update.to_csv('PFA_no_cluster_parameters.csv')
+# pfa_coef_update['cluster'] = list(range(len(pfa_coef_update)))
+# pfa_coef_update.to_csv('PFA_no_cluster_parameters.csv')
 
