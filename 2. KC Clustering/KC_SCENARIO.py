@@ -75,9 +75,14 @@ s2 = table_scenario[(table_scenario['total_opp'] >= 3) &
                (table_scenario['success_probability'] >= 0.8)
                ]
 
-
 s2.groupby(['cluster', 'fail_opp'])['success_opp'].min()
 # success - fail distance for each cluster
+
+# Number of practice should be at least 3, fail at least 1, prob at least 0.8
+s3 = table_scenario[(table_scenario['fail_opp'] == 3) &
+               (table_scenario['total_opp'] == 3)
+               ]
+s3
 
 
 
